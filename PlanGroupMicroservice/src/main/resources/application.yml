@@ -1,0 +1,48 @@
+resilience4j.ratelimiter:
+ instances:
+  planGroupService:
+   registerHealthIndicator: false
+   limitForPeriod: 5
+   limitRefreshPeriod: 5s 
+   timeoutDuration: 3
+   eventConsumerBufferSize: 100  
+resilience4j.circuitbreaker:
+  configs:
+        default:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            minimumNumberOfCalls: 5
+            permittedNumberOfCallsInHalfOpenState: 3
+            automaticTransitionFromOpenToHalfOpenEnabled: true
+            waitDurationInOpenState: 2s
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10
+            recordExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+  shared:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+            permittedNumberOfCallsInHalfOpenState: 30
+            waitDurationInOpenState: 1s
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10
+instances:
+   backendA:
+    baseConfig: default
+    ringBufferSizeInClosedState : 5
+   backendB:
+    registerHealthIndicator: true
+    slidingWindowSize: 10
+    minimumNumberOfCalls: 10
+    permittedNumberOfCallsInHalfOpenState: 3
+    waitDurationInOpenState: 1s
+    failureRateThreshold: 50
+    eventConsumerBufferSize: 10
+resilience4j.bulkhead:
+   instances:
+     coverageService:
+       maxConcurrentCalls: 20
+       maxWaitDuration: 2ms          
+
+             
