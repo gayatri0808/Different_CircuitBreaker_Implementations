@@ -1,0 +1,9 @@
+server:
+  port : 8085
+tomcat :
+    max-threads: 15
+resilience4j.bulkhead:
+   instances:
+     coverageService:
+       maxConcurrentCalls: 20
+       maxWaitDuration: 10ms
